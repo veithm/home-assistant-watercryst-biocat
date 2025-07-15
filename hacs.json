@@ -1,0 +1,7 @@
+{
+  "name": "Watercryst Biocat",
+  "content_in_root": false,
+  "domains": ["sensor"],
+  "country": "🇦🇹",
+  "render_readme": true
+}
