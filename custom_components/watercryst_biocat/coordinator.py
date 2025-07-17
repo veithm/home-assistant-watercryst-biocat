@@ -19,10 +19,12 @@ class WatercrystDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         headers = {"X-API-KEY": self.api_key}
         data = {}
-
+        _LOGGER.error("using API KEY %s", self.api_key)
         async with aiohttp.ClientSession() as session:
             async with session.get("https://appapi.watercryst.com/v1/measurements/direct", headers=headers) as resp1:
                 if resp1.status != 200:
+                    text = await resp1.text()
+                    _LOGGER.error("Measurement API returned %s: %s", resp1.status, text)
                     raise Exception("Measurement API error")
                 data.update(await resp1.json())
 
