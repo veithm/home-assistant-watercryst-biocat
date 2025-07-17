@@ -1,9 +1,0 @@
-{
-  "domain": "watercryst_biocat",
-  "name": "Watercryst Biocat",
-  "version": "1.0.0",
-  "requirements": ["aiohttp"],
-  "config_flow": true,
-  "dependencies": [],
-  "codeowners": ["@veithm"]
-}
