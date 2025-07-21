@@ -1,15 +1,9 @@
 {
   "domain": "watercryst_biocat",
   "name": "Watercryst Biocat",
-  "version": "1.1.0",
-  "documentation": "https://github.com/veithm/home-assistant-watercryst-biocat",
-  "issue_tracker": "https://github.com/veithm/home-assistant-watercryst-biocat/issues",
-  "requirements": [],
-  "dependencies": [],
-  "codeowners": ["@veithm"],
+  "version": "1.0.0",
+  "requirements": ["aiohttp"],
   "config_flow": true,
-  "iot_class": "cloud_push",
-  "integration_type": "device",
-  "homeassistant": "2023.0.0",
-  "components": ["sensor", "webhook"]
+  "dependencies": [],
+  "codeowners": ["@veithm"]
 }

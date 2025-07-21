@@ -8,15 +8,20 @@ SENSOR_TYPES = {
     "flowRate": ("Durchfluss", "L/min"),
     "lastWaterTapVolume": ("Letzte Zapfmenge", "L"),
     "lastWaterTapDuration": ("Letzte Zapfdauer", "s"),
-    "type": ("Datentyp", None),
+    "online": ("Gerät Online", None),
+    "deviceMode": ("Gerätemodus", None),
+    "mlState": ("Leckage-Messung", None),
+    "totalWaterConsumption": ("Gesamtverbrauch", "L"),
 }
 
 async def async_setup_entry(hass, entry: ConfigEntry, async_add_entities):
     coordinator = hass.data[DOMAIN][entry.entry_id]
+    await coordinator.async_refresh()
 
     entities = [
-        WatercrystSensor(coordinator, key, *SENSOR_TYPES.get(key, (key, None)))
-        for key in coordinator.data
+        WatercrystSensor(coordinator, key, *SENSOR_TYPES[key])
+        for key in SENSOR_TYPES
+        if key in coordinator.data
     ]
     async_add_entities(entities)
 
@@ -27,6 +32,7 @@ class WatercrystSensor(Entity):
         self._name = name
         self._unit = unit
         self._attr_unique_id = f"watercryst_{key}"
+        self._attr_device_class = None
 
     @property
     def name(self):
