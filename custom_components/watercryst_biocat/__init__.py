@@ -3,6 +3,7 @@ from homeassistant.config_entries import ConfigEntry
 from .const import DOMAIN
 from .coordinator import WatercrystDataUpdateCoordinator
 from .api import pause_protection, unpause_protection
+import asyncio
 
 async def async_setup(hass: HomeAssistant, config: dict):
     return True
@@ -25,12 +26,16 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         minutes = call.data.get("minutes", 60)
         await hass.async_add_executor_job(pause_protection, api_key, minutes)
 
+        await asyncio.sleep(1)  # kurze Verzögerung vor dem Refresh
+        
         coordinator = hass.data[DOMAIN][entry.entry_id]
         await coordinator.async_request_refresh()
 
     async def handle_unpause(call: ServiceCall) -> None:
         await hass.async_add_executor_job(unpause_protection, api_key)
 
+        await asyncio.sleep(1)  # kurze Verzögerung vor dem Refresh
+        
         coordinator = hass.data[DOMAIN][entry.entry_id]
         await coordinator.async_request_refresh()
 
