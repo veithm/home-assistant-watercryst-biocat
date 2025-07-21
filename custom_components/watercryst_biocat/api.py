@@ -2,7 +2,7 @@ import requests
 import logging
 
 _LOGGER = logging.getLogger(__name__)
-API_BASE = "https://appapi.watercryst.com"
+API_BASE = "https://appapi.watercryst.com/v1"
 
 def pause_protection(api_key: str, minutes: int = 60):
     url = f"{API_BASE}/leakageprotection/pause?minutes={minutes}"
