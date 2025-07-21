@@ -3,6 +3,7 @@ from datetime import timedelta
 import aiohttp
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from .const import DOMAIN
+from datetime import datetime, timezone
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -34,6 +35,26 @@ class WatercrystDataUpdateCoordinator(DataUpdateCoordinator):
                     data["online"] = state.get("online")
                     data["deviceMode"] = state.get("mode", {}).get("name")
                     data["mlState"] = state.get("mlState")
+
+                    rawValueWaterProtection = state.get("waterProtection", {}).get("pauseLeakageProtectionUntilUTC")
+                    if rawValueWaterProtection == "2000-01-01T00:00:00.0000000Z":
+                        data["waterprotection"] = "active"
+                    else:
+                        try:
+                            dt = datetime.strptime(raw_value, "%Y-%m-%dT%H:%M:%S.%f0Z")
+                        except ValueError:
+                            dt = datetime.strptime(raw_value, "%Y-%m-%dT%H:%M:%S.%fZ")
+                        
+                        now = datetime.now(timezone.utc)
+                        remaining = dt - now
+                        if remaining.total_seconds() <= 0:
+                            data["waterprotection"] = "active"
+
+                        hours, remainder = divmod(int(remaining.total_seconds()), 3600)
+                        minutes = remainder // 60
+
+                        data["waterprotection"] = f"paused for {hours}h {minutes}min"
+
 
             async with session.get("https://appapi.watercryst.com/v1/statistics/cumulative/total", headers=headers) as resp3:
                 if resp3.status == 200:
