@@ -1,0 +1,18 @@
+pause_protection:
+  name: Wasserschutz pausieren
+  description: Pausiert die Leakage Protection am Watercryst-Gerät
+  fields:
+    minutes:
+      name: Minuten
+      description: Dauer der Pause
+      required: false
+      selector:
+        number:
+          min: 1
+          max: 1440
+          unit_of_measurement: min
+          mode: box
+
+unpause_protection:
+  name: Wasserschutz aktivieren
+  description: Setzt Leakage Protection sofort wieder aktiv
