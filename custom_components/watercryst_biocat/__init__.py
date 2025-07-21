@@ -25,8 +25,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         minutes = call.data.get("minutes", 60)
         await hass.async_add_executor_job(pause_protection, api_key, minutes)
 
+        coordinator = hass.data[DOMAIN][entry.entry_id]
+        await coordinator.async_request_refresh()
+
     async def handle_unpause(call: ServiceCall) -> None:
         await hass.async_add_executor_job(unpause_protection, api_key)
+
+        coordinator = hass.data[DOMAIN][entry.entry_id]
+        await coordinator.async_request_refresh()
 
     # Register services (store names so we can remove them on unload)
     hass.services.async_register(DOMAIN, "pause_protection", handle_pause)
