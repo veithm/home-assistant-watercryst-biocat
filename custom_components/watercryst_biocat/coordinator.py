@@ -41,9 +41,9 @@ class WatercrystDataUpdateCoordinator(DataUpdateCoordinator):
                         data["waterprotection"] = "active"
                     else:
                         try:
-                            dt = datetime.strptime(rawValueWaterProtection, "%Y-%m-%dT%H:%M:%S.%f0Z")
+                            dt = datetime.strptime(rawValueWaterProtection, "%Y-%m-%dT%H:%M:%S.%f0Z").replace(tzinfo=timezone.utc)
                         except ValueError:
-                            dt = datetime.strptime(rawValueWaterProtection, "%Y-%m-%dT%H:%M:%S.%fZ")
+                            dt = datetime.strptime(rawValueWaterProtection, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                         
                         now = datetime.now(timezone.utc)
                         remaining = dt - now
