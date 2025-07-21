@@ -37,15 +37,15 @@ class WatercrystDataUpdateCoordinator(DataUpdateCoordinator):
                     data["mlState"] = state.get("mlState")
 
                     rawValueWaterProtection = state.get("waterProtection", {}).get("pauseLeakageProtectionUntilUTC")
-                    if rawValueWaterProtection == "2000-01-01T00:00:00.0000000Z":
+                    now = datetime.now(timezone.utc)
+                    try:
+                        dt = datetime.strptime(rawValueWaterProtection, "%Y-%m-%dT%H:%M:%S.%f0Z").replace(tzinfo=timezone.utc)
+                    except ValueError:
+                        dt = datetime.strptime(rawValueWaterProtection, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+                    
+                    if rawValueWaterProtection < now:
                         data["waterprotection"] = "active"
                     else:
-                        try:
-                            dt = datetime.strptime(rawValueWaterProtection, "%Y-%m-%dT%H:%M:%S.%f0Z").replace(tzinfo=timezone.utc)
-                        except ValueError:
-                            dt = datetime.strptime(rawValueWaterProtection, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
-                        
-                        now = datetime.now(timezone.utc)
                         remaining = dt - now
                         if remaining.total_seconds() <= 0:
                             data["waterprotection"] = "active"
