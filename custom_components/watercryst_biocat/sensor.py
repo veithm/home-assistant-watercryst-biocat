@@ -10,7 +10,8 @@ SENSOR_TYPES = {
     "lastWaterTapDuration": ("Letzte Zapfdauer", "s"),
     "online": ("Gerät Online", None),
     "deviceMode": ("Gerätemodus", None),
-    "mlState": ("Leckage-Messung", None),
+    "mlState": ("Geräte Status", None),
+    "waterprotection": ("Protection", None),
     "totalWaterConsumption": ("Gesamtverbrauch", "L"),
 }
 
